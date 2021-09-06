@@ -1,6 +1,11 @@
-/* eslint-disable camelcase */
 import axios from "axios";
 import { api } from "./const";
+
+class Tushare {
+  constructor() {
+
+  }
+}
 
 /**
  *
@@ -8,13 +13,12 @@ import { api } from "./const";
  * @param {object} params
  * @param {array} fields
  */
-// eslint-disable-next-line max-params
 const query = async ({
   apiName = "",
   params = {},
   fields = [],
 }) => {
-  if (!api && api === "") {
+  if (!apiName && apiName === "") {
     throw new Error("API is required");
   } else if (!api[apiName]) {
     throw new Error("API not Found");
