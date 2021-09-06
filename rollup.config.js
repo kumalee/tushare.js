@@ -2,34 +2,33 @@ import { terser } from "rollup-plugin-terser";
 import resolve from "@rollup/plugin-node-resolve";
 import babel from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
-import { name } from "./package.json";
 
 export default {
     input: "src/tushare.js",
     external: [
         "axios",
-        "@babel/runtime",
     ],
     plugins: [
         resolve(),
         babel({
             exclude: "node_modules/**",
-            babelHelpers: "runtime",
+            babelHelpers: 'bundled',
         }),
-        commonjs({
-            include: "node_modules/**",
-        }),
+        commonjs(),
         terser(),
     ],
     output: [
         {
-            file: "tushare.js",
+            file: "dist/tushare.js",
             format: "umd",
-            name,
+            name: 'tushare',
             sourcemap: true,
+            globals: {
+              axios: 'axios',
+            },
         },
         {
-            file: "tushare.esm.js",
+            file: "dist/tushare.esm.js",
             format: "es",
         },
     ],
