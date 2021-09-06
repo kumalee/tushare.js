@@ -1,61 +1,80 @@
 import axios from "axios";
 import { api } from "./const";
 
+type QueryParam = {
+  apiName: string,
+  params: any,
+  fields: string[],
+};
+
+type QueryData = {
+  fields: string[],
+  items: string[],
+  length: number,
+}
+
+type Result = {
+  isSuccess: boolean,
+  data?: [],
+  hasMore?: boolean,
+};
+
 class Tushare {
-  constructor() {
+  token: string;
+  api: any;
 
-  }
-}
-
-/**
- *
- * @param {string} apiName
- * @param {object} params
- * @param {array} fields
- */
-const query = async ({
-  apiName = "",
-  params = {},
-  fields = [],
-}) => {
-  if (!apiName && apiName === "") {
-    throw new Error("API is required");
-  } else if (!api[apiName]) {
-    throw new Error("API not Found");
+  constructor(token: string) {
+    this.token = token;
+    this.api = api;
   }
 
-  try {
-    const response = await axios.post(api.url, {
-      api: apiName,
-      token: process.env.TUSHARE_TOKEN,
-      params,
-      fields: fields,
-    });
-    if (response && response.data && response.data.code === 0) {
-      let fields = response.data.data.fields;
-      let items = response.data.data.items;
-      let hasMore = response.data.data.has_more;
-
-      let data = await formatData({ fields, items });
-
-      return [
-        true,
-        data,
-        hasMore,
-      ];
-    } else {
-      return [false]
+  /**
+   *
+   * @param {queryParam} param
+   * @param {any} params
+   * @param {array} fields
+   */
+  async query(param: QueryParam): Promise<Result> {
+    const { apiName, params, fields } = param;
+    if (!this.api[apiName]) {
+      throw new Error("API not Found");
     }
-  } catch (error) {
-    throw error;
-  }
-}
 
-/**
- * format data to an array like [{field: value}]
- * @param {Array} data
- */
-const formatData = async (data) => {
+    try {
+      const response = await axios.post(this.api.url, {
+        api: apiName,
+        token: this.token,
+        params,
+        fields: fields,
+      });
+      if (response && response.data && response.data.code === 0) {
+        let fields = response.data.data.fields;
+        let items = response.data.data.items;
+        let hasMore = response.data.data.has_more;
+
+        let data = await this.formatData({ fields, items, length: items.length });
+
+        return {
+          isSuccess: true,
+          data,
+          hasMore,
+        };
+      } else {
+        return {
+          isSuccess: false,
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+  /**
+   * format data to an array like [{field: value}]
+   * @param {Array} data
+   */
+  formatData(data: QueryData): any {
     if (!data || data.length <= 0) return data;
     let fields = data.fields;
     let items = data.items;
@@ -71,6 +90,7 @@ const formatData = async (data) => {
         result.push(newItem);
     }
     return result;
+  }
 }
 
-export default query;
+export default Tushare;
