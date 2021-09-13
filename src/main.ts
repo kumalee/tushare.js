@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "./const";
+import { api, endpoint } from "./const";
 
 type QueryParam = {
   apiName: string,
@@ -19,13 +19,23 @@ type Result = {
   hasMore?: boolean,
 };
 
-class Tushare {
+class TuShare {
   token: string;
   api: any;
 
   constructor(token: string) {
-    this.token = token;
-    this.api = api;
+    let _this = this;
+    _this.token = token;
+    _this.api = api;
+    Object.keys(api).forEach(function(key){
+      _this[key] = function(params = {}, fields = []) {
+        return this.query({
+          apiName: key,
+          params,
+          fields,
+        });
+      }
+    })
   }
 
   /**
@@ -41,8 +51,8 @@ class Tushare {
     }
 
     try {
-      const response = await axios.post(this.api.url, {
-        api: apiName,
+      const response = await axios.post(endpoint, {
+        api_name: apiName,
         token: this.token,
         params,
         fields: fields,
@@ -93,4 +103,4 @@ class Tushare {
   }
 }
 
-export default Tushare;
+export default TuShare;

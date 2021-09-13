@@ -1,6 +1,7 @@
+export const endpoint = "http://api.waditu.com";
+
 // api object
 export const api = {
-  url: "http://api.waditu.com",
   // 股票列表 基础信息数据
   // 接口：stock_basic，可以通过数据工具调试和查看数据。
   // 描述：获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
