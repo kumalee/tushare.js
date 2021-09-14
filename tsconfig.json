@@ -3,6 +3,7 @@
     "lib": ["es6"],
     "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "allowJs": true
   },
   "exclude": [

@@ -9,8 +9,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && rollup --config",
-    "test": "jest",
-    "coverage": "jest --coverage"
+    "test": "jest --coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
