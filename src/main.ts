@@ -2,9 +2,9 @@ import axios from "axios";
 import { api, endpoint } from "./const";
 
 type QueryParam = {
-  apiName: string,
-  params: any,
-  fields: string[],
+  api_name: string,
+  params?: any,
+  fields?: string[],
 };
 
 type QueryData = {
@@ -19,7 +19,14 @@ type Result = {
   hasMore?: boolean,
 };
 
-class TuShare {
+interface Tu {
+  token: String;
+  api: any;
+  query(param: QueryParam): Promise<Result>; //method
+  formatData(data: QueryData): any;
+}
+
+class TuShare implements Tu {
   token: string;
   api: any;
 
@@ -27,15 +34,6 @@ class TuShare {
     let _this = this;
     _this.token = token;
     _this.api = api;
-    Object.keys(api).forEach(function(key){
-      _this[key] = function(params = {}, fields = []) {
-        return this.query({
-          apiName: key,
-          params,
-          fields,
-        });
-      }
-    })
   }
 
   /**
@@ -45,17 +43,20 @@ class TuShare {
    * @param {array} fields
    */
   async query(param: QueryParam): Promise<Result> {
-    const { apiName, params, fields } = param;
-    if (!this.api[apiName]) {
+    const { api_name, params, fields } = param;
+    if (!this.api[api_name]) {
       throw new Error("API not Found");
     }
 
+    // if fields not set, output all fields of current api
+    const _fields = (fields && fields.length) ? fields : this.api[api_name].fields;
+
     try {
       const response = await axios.post(endpoint, {
-        api_name: apiName,
+        api_name: api_name,
         token: this.token,
         params,
-        fields: fields,
+        fields: _fields,
       });
       if (response && response.data && response.data.code === 0) {
         let fields = response.data.data.fields;
