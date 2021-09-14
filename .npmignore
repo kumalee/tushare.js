@@ -1,0 +1,10 @@
+.editorconfig
+.env
+.env.example
+src/*
+test/*
+coverage/*
+yarn-error.log
+rollup.config.js
+jest.config.js
+tsconfig.json

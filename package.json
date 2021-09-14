@@ -2,8 +2,8 @@
   "name": "@studiolh/tushare",
   "version": "1.0.0",
   "description": "js/node.js for tushare.pro",
-  "main": "tushare.js",
-  "module": "tushare.esm.js",
+  "main": "dist/tushare.js",
+  "module": "dist/tushare.esm.js",
   "author": "Kuma Li <li.jun.kuma@gmail.com>",
   "license": "MIT",
   "scripts": {
