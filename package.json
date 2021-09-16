@@ -1,6 +1,6 @@
 {
   "name": "@studiolh/tushare",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "js/node.js for tushare.pro",
   "main": "dist/tushare.js",
   "module": "dist/tushare.esm.js",
